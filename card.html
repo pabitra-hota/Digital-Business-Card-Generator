@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Business Card</title>
+
+  <!-- ===== CSS STYLING ===== -->
+  <style>
+
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Full screen centered layout - perfect for phones */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Outer card wrapper */
+    .card-wrapper {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    /* THE BUSINESS CARD */
+    .biz-card {
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      margin-bottom: 20px;
+      /* background color set by JS based on theme param */
+    }
+
+    /* Name */
+    .card-name {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffffff;
+      word-break: break-word;
+      margin-bottom: 4px;
+    }
+
+    /* Job title */
+    .card-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.85;
+      margin-bottom: 4px;
+      /* color set by JS */
+    }
+
+    /* Company */
+    .card-company {
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    /* Tagline */
+    .card-tagline {
+      font-size: 13px;
+      font-style: italic;
+      color: #ffffff;
+      opacity: 0.7;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    /* Horizontal divider inside card */
+    .card-divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      margin: 16px 0;
+    }
+
+    /* Each contact info row */
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      word-break: break-all;
+    }
+
+    .contact-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Clickable links (email, phone, website) */
+    .contact-row a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+    }
+
+    .contact-row a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== SAVE CONTACT BUTTON ===== */
+    .save-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #ffffff;
+      color: #1a1a2e;
+      font-weight: bold;
+      font-size: 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .save-btn:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Small footer text */
+    .footer-text {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .footer-text a {
+      color: #c9a227;
+      text-decoration: none;
+    }
+
+    /* Error message if no data found in URL */
+    .error-box {
+      text-align: center;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .error-box h2 {
+      color: #e53e3e;
+      margin-bottom: 10px;
+    }
+
+    .error-box p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- The card content is loaded here by JavaScript -->
+  <div class="card-wrapper" id="cardWrapper">
+    <!-- JavaScript fills this in below -->
+  </div>
+
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+
+    // Define the same color themes as in index.html
+    var themes = [
+      { name: 'dark-gold', bg: '#1a1a2e', accent: '#c9a227' },
+      { name: 'midnight',  bg: '#0d1117', accent: '#58a6ff' },
+      { name: 'forest',    bg: '#0b2619', accent: '#4ade80' },
+      { name: 'crimson',   bg: '#2b0a0a', accent: '#f87171' },
+      { name: 'ocean',     bg: '#0a1628', accent: '#38bdf8' },
+      { name: 'violet',    bg: '#1e0a3c', accent: '#a78bfa' },
+      { name: 'slate',     bg: '#1e293b', accent: '#94a3b8' },
+      { name: 'copper',    bg: '#1c120a', accent: '#fb923c' }
+    ];
+
+    // Step 1: Read all the data from the URL
+    var params  = new URLSearchParams(window.location.search);
+    var name    = params.get('name')    || '';
+    var title   = params.get('title')   || '';
+    var company = params.get('company') || '';
+    var tagline = params.get('tagline') || '';
+    var email   = params.get('email')   || '';
+    var phone   = params.get('phone')   || '';
+    var website = params.get('website') || '';
+    var linkedin= params.get('linkedin')|| '';
+    var social  = params.get('social')  || '';
+    var themeName = params.get('theme') || 'dark-gold';
+
+    // Step 2: Find the matching theme object
+    var selectedTheme = themes[0]; // default
+    for (var i = 0; i < themes.length; i++) {
+      if (themes[i].name === themeName) {
+        selectedTheme = themes[i];
+        break;
+      }
+    }
+
+    // Step 3: Get the container div
+    var wrapper = document.getElementById('cardWrapper');
+
+    // Step 4: If no name is present, show an error
+    if (!name) {
+      wrapper.innerHTML =
+        '<div class="error-box">' +
+          '<h2>No card found</h2>' +
+          '<p>This QR code does not contain any card information.<br>' +
+          'Please generate a valid card from the generator.</p>' +
+        '</div>';
+    } else {
+      // Step 5: Set the page title to the person's name
+      document.title = name + ' — Digital Card';
+
+      // Step 6: Build the contact rows HTML
+      var contactRows = '';
+      if (email) {
+        contactRows += '<div class="contact-row"><span class="contact-icon">✉</span><a href="mailto:' + email + '">' + email + '</a></div>';
+      }
+      if (phone) {
+        contactRows += '<div class="contact-row"><span class="contact-icon">📞</span><a href="tel:' + phone + '">' + phone + '</a></div>';
+      }
+      if (website) {
+        var websiteURL = website.startsWith('http') ? website : 'https://' + website;
+        contactRows += '<div class="contact-row"><span class="contact-icon">🌐</span><a href="' + websiteURL + '" target="_blank">' + website + '</a></div>';
+      }
+      if (linkedin) {
+        var linkedinURL = linkedin.startsWith('http') ? linkedin : 'https://' + linkedin;
+        contactRows += '<div class="contact-row"><span class="contact-icon">🔗</span><a href="' + linkedinURL + '" target="_blank">' + linkedin + '</a></div>';
+      }
+      if (social) {
+        var socialURL = social.startsWith('http') ? social : 'https://' + social;
+        contactRows += '<div class="contact-row"><span class="contact-icon">👤</span><a href="' + socialURL + '" target="_blank">' + social + '</a></div>';
+      }
+
+      // Step 7: Build the card HTML and inject it
+      wrapper.innerHTML =
+        '<div class="biz-card" id="bizCard">' +
+          '<div class="card-name">' + name + '</div>' +
+          (title   ? '<div class="card-title"   id="c-title">'   + title   + '</div>' : '') +
+          (company ? '<div class="card-company">' + company + '</div>' : '') +
+          (tagline ? '<div class="card-tagline">' + tagline + '</div>' : '') +
+          '<hr class="card-divider" />' +
+          contactRows +
+        '</div>' +
+        '<button class="save-btn" onclick="saveContact()">+ Save Contact</button>' +
+        '<div class="footer-text">Powered by <a href="index.html">CardForge</a></div>';
+
+      // Step 8: Apply the background and accent color
+      var card = document.getElementById('bizCard');
+      card.style.backgroundColor = selectedTheme.bg;
+
+      // Apply accent color to job title
+      var titleEl = document.getElementById('c-title');
+      if (titleEl) {
+        titleEl.style.color = selectedTheme.accent;
+      }
+    }
+
+    // Step 9: Save Contact button
+    // Creates a .vcf file so the user can add the contact to their phone
+    function saveContact() {
+      // Build the vCard text (standard format for phone contacts)
+      var vcard = 'BEGIN:VCARD\n';
+      vcard    += 'VERSION:3.0\n';
+      vcard    += 'FN:' + name + '\n';
+      if (title)   vcard += 'TITLE:' + title   + '\n';
+      if (company) vcard += 'ORG:'   + company + '\n';
+      if (email)   vcard += 'EMAIL:' + email   + '\n';
+      if (phone)   vcard += 'TEL:'   + phone   + '\n';
+      if (website) vcard += 'URL:'   + website + '\n';
+      vcard    += 'END:VCARD';
+
+      // Create a downloadable .vcf file
+      var blob = new Blob([vcard], { type: 'text/vcard' });
+      var url  = URL.createObjectURL(blob);
+
+      var link      = document.createElement('a');
+      link.href     = url;
+      link.download = name + '.vcf'; // the file name
+      link.click();
+
+      // Clean up the temporary URL
+      URL.revokeObjectURL(url);
+    }
+
+  </script>
+
+</body>
+</html>

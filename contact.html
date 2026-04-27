@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - CardForge</title>
+
+  <!-- ===== CSS STYLING ===== -->
+  <style>
+
+    /* Reset default margin and padding for all elements */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Page background */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      color: #222;
+    }
+
+    /* ===== NAVIGATION BAR ===== */
+    nav {
+      background-color: #1a1a2e;
+      padding: 14px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #c9a227;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover { color: #fff; }
+    .nav-links a.active { color: #c9a227; }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      background-color: #1a1a2e;
+      color: white;
+      text-align: center;
+      padding: 50px 20px 36px;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      color: #c9a227;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #aaa;
+      font-size: 14px;
+      max-width: 460px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ===== MAIN LAYOUT (form left, info right) ===== */
+    .workspace {
+      max-width: 1000px;
+      margin: 36px auto;
+      padding: 0 20px 60px;
+
+      /* 2-column grid: form takes more space */
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+    }
+
+    /* On mobile, stack them vertically */
+    @media (max-width: 780px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== CONTACT FORM CARD ===== */
+    .form-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 28px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #c9a227;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Group of label + input/textarea */
+    .field-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    /* Input and Textarea styling */
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #c9a227;
+      outline: none;
+    }
+
+    /* Red border on invalid inputs */
+    input.error,
+    textarea.error {
+      border-color: #e53e3e;
+    }
+
+    /* Side-by-side row (First Name + Last Name) */
+    .row-two {
+      display: flex;
+      gap: 14px;
+    }
+
+    .row-two .field-group {
+      flex: 1;
+    }
+
+    /* Textarea height */
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Character count below textarea */
+    .char-count {
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* Small error text below each field */
+    .field-error {
+      font-size: 12px;
+      color: #e53e3e;
+      margin-top: 4px;
+      display: none; /* hidden by default */
+    }
+
+    .field-error.show {
+      display: block; /* shown when there is an error */
+    }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: #c9a227;
+      color: #1a1a2e;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      background-color: #e0b830;
+    }
+
+    /* ===== SUCCESS MESSAGE (shown after submit) ===== */
+    .success-box {
+      display: none; /* hidden until form is submitted */
+      text-align: center;
+      padding: 30px 16px;
+    }
+
+    .success-box.show {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 2.4rem;
+      color: #38a169;
+      margin-bottom: 14px;
+    }
+
+    .success-box h3 {
+      font-size: 1.4rem;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    .success-box p {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    .btn-again {
+      padding: 10px 24px;
+      background-color: #c9a227;
+      color: #1a1a2e;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* ===== RIGHT SIDEBAR ===== */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Each sidebar card */
+    .info-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .info-card-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #c9a227;
+      margin-bottom: 14px;
+    }
+
+    /* A row inside the info card (icon + text) */
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .contact-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Icon box */
+    .item-icon {
+      width: 36px;
+      height: 36px;
+      background-color: #fff8e1;
+      border: 1px solid #f0d080;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .item-text .item-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    .item-text .item-value {
+      font-size: 13px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    .item-text .item-value a {
+      color: #222;
+      text-decoration: none;
+    }
+
+    .item-text .item-value a:hover {
+      color: #c9a227;
+    }
+
+    /* Status dot (green pulsing dot) */
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #38a169;
+      border-radius: 50%;
+    }
+
+    /* ===== FAQ SECTION ===== */
+    .faq-item {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Question row - clicking it toggles the answer */
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .faq-question:hover {
+      color: #c9a227;
+    }
+
+    /* The answer text - hidden by default */
+    .faq-answer {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+      max-height: 0;       /* 0 height = hidden */
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    /* When open, give it enough height to show */
+    .faq-answer.open {
+      max-height: 150px;
+      padding-top: 6px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #888;
+      border-top: 1px solid #ddd;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== NAVIGATION BAR ===== -->
+  <nav>
+    <a href="index.html" class="logo">CardForge</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Generator</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <div class="hero">
+    <h1>Get in Touch</h1>
+    <p>Have a question or feedback? Fill the form and we'll get back to you shortly.</p>
+  </div>
+
+  <!-- ===== MAIN AREA ===== -->
+  <div class="workspace">
+
+    <!-- LEFT: CONTACT FORM -->
+    <div class="form-card">
+      <div class="card-title">Send a Message</div>
+
+      <!-- This div is hidden after a successful submit -->
+      <div id="contactForm">
+
+        <!-- First Name + Last Name side by side -->
+        <div class="row-two">
+          <div class="field-group">
+            <label for="fname">First Name *</label>
+            <input type="text" id="fname" placeholder="Your first name" />
+            <div class="field-error" id="err-fname">Please enter your first name.</div>
+          </div>
+          <div class="field-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Your last name" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" placeholder="you@email.com" />
+          <div class="field-error" id="err-email">Please enter a valid email address.</div>
+        </div>
+
+        <!-- Subject dropdown -->
+        <div class="field-group">
+          <label for="subject">Subject *</label>
+          <select id="subject">
+            <option value="">— Select a subject —</option>
+            <option>General Inquiry</option>
+            <option>Bug Report</option>
+            <option>Feature Request</option>
+            <option>Project Feedback</option>
+            <option>Collaboration</option>
+            <option>Other</option>
+          </select>
+          <div class="field-error" id="err-subject">Please select a subject.</div>
+        </div>
+
+        <!-- Message textarea -->
+        <div class="field-group">
+          <label for="message">Message *</label>
+          <textarea id="message" placeholder="Write your message here..." oninput="updateCharCount()"></textarea>
+          <div class="char-count" id="charCount">0 / 500</div>
+          <div class="field-error" id="err-message">Please enter a message (at least 10 characters).</div>
+        </div>
+
+        <!-- Submit button -->
+        <button class="btn-submit" onclick="submitForm()">Send Message</button>
+
+      </div><!-- end contactForm -->
+
+      <!-- Success message (shown after submit) -->
+      <div class="success-box" id="successBox">
+        <div class="success-icon">✓</div>
+        <h3>Message Sent!</h3>
+        <p>Thank you for reaching out. We'll reply to your email within 24 hours.</p>
+        <button class="btn-again" onclick="resetForm()">Send Another</button>
+      </div>
+
+    </div><!-- end form-card -->
+
+
+    <!-- RIGHT: SIDEBAR INFO -->
+    <div class="sidebar">
+
+      <!-- Contact Details -->
+      <div class="info-card">
+        <div class="info-card-title">Contact Details</div>
+        <div class="contact-item">
+          <div class="item-icon">✉</div>
+          <div class="item-text">
+            <div class="item-label">Email</div>
+            <div class="item-value"><a href="mailto:hello@cardforge.dev">hello@cardforge.dev</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="item-icon">🕐</div>
+          <div class="item-text">
+            <div class="item-label">Response Time</div>
+            <div class="item-value">Within 24 hours</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="item-icon">📍</div>
+          <div class="item-text">
+            <div class="item-label">Location</div>
+            <div class="item-value">India</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="info-card">
+        <div class="info-card-title">Status</div>
+        <div class="status-row">
+          <div class="status-dot"></div>
+          <span>All systems operational</span>
+        </div>
+        <p style="font-size:12px; color:#888; margin-top:8px; line-height:1.6;">
+          CardForge is running smoothly. No known issues at this time.
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <div class="info-card">
+        <div class="info-card-title">FAQ</div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Is CardForge free to use?
+            <span>▾</span>
+          </div>
+          <div class="faq-answer">
+            Yes — CardForge is completely free. No sign-up required to generate your business card.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Is my data stored anywhere?
+            <span>▾</span>
+          </div>
+          <div class="faq-answer">
+            Card data is processed in your browser. Only account info (if you sign up) is saved in our database.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Can I export my card as an image?
+            <span>▾</span>
+          </div>
+          <div class="faq-answer">
+            You can use the "Print / Save as PDF" option. Image export is planned for a future version.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Does the QR code work on all phones?
+            <span>▾</span>
+          </div>
+          <div class="faq-answer">
+            Yes. The QR code uses vCard 3.0 format, supported by all modern Android and iOS devices.
+          </div>
+        </div>
+
+      </div><!-- end FAQ card -->
+
+    </div><!-- end sidebar -->
+
+  </div><!-- end workspace -->
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    &copy; 2026 CardForge — INT219/INT222 Student Project
+  </footer>
+
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+
+    // --- Update character counter below the textarea ---
+    function updateCharCount() {
+      var textarea = document.getElementById('message');
+      var count = textarea.value.length;
+
+      // Limit to 500 characters
+      if (count > 500) {
+        textarea.value = textarea.value.slice(0, 500);
+        count = 500;
+      }
+
+      document.getElementById('charCount').textContent = count + ' / 500';
+    }
+
+    // --- Toggle FAQ answer open/close ---
+    function toggleFaq(questionEl) {
+      // The answer div is right after the question div
+      var answer = questionEl.nextElementSibling;
+      answer.classList.toggle('open');
+    }
+
+    // --- Submit the contact form ---
+    function submitForm() {
+      var isValid = true;
+
+      // Get the values from each field
+      var fname   = document.getElementById('fname').value.trim();
+      var email   = document.getElementById('email').value.trim();
+      var subject = document.getElementById('subject').value;
+      var message = document.getElementById('message').value.trim();
+
+      // Hide all previous error messages first
+      document.getElementById('err-fname').classList.remove('show');
+      document.getElementById('err-email').classList.remove('show');
+      document.getElementById('err-subject').classList.remove('show');
+      document.getElementById('err-message').classList.remove('show');
+
+      // Remove red border from inputs
+      document.getElementById('fname').classList.remove('error');
+      document.getElementById('email').classList.remove('error');
+      document.getElementById('message').classList.remove('error');
+
+      // Check: First name must not be empty
+      if (fname === '') {
+        document.getElementById('err-fname').classList.add('show');
+        document.getElementById('fname').classList.add('error');
+        isValid = false;
+      }
+
+      // Check: Email must be valid
+      var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        document.getElementById('err-email').classList.add('show');
+        document.getElementById('email').classList.add('error');
+        isValid = false;
+      }
+
+      // Check: Subject must be selected
+      if (subject === '') {
+        document.getElementById('err-subject').classList.add('show');
+        isValid = false;
+      }
+
+      // Check: Message must be at least 10 characters
+      if (message.length < 10) {
+        document.getElementById('err-message').classList.add('show');
+        document.getElementById('message').classList.add('error');
+        isValid = false;
+      }
+
+      // If any field is invalid, stop here
+      if (!isValid) {
+        return;
+      }
+
+      // All fields are valid — hide form and show success message
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('successBox').classList.add('show');
+    }
+
+    // --- Reset the form to send another message ---
+    function resetForm() {
+      // Clear all field values
+      document.getElementById('fname').value    = '';
+      document.getElementById('lname').value    = '';
+      document.getElementById('email').value    = '';
+      document.getElementById('subject').value  = '';
+      document.getElementById('message').value  = '';
+      document.getElementById('charCount').textContent = '0 / 500';
+
+      // Show the form again and hide the success message
+      document.getElementById('contactForm').style.display = 'block';
+      document.getElementById('successBox').classList.remove('show');
+    }
+
+  </script>
+
+</body>
+</html>
