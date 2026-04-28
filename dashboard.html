@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Card Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+
+<main class="page">
+  <section class="dashboard-box">
+    <p><a href="about.html">About</a> | <a href="contact.html">Contact</a></p>
+
+    <h2>Create Card</h2>
+
+    <input id="name" oninput="updatePreview()" placeholder="Name">
+    <input id="email" oninput="updatePreview()" placeholder="Email">
+    <select id="color" onchange="updatePreview()">
+      <option value="#4f46e5">Indigo</option>
+      <option value="#059669">Green</option>
+      <option value="#dc2626">Red</option>
+      <option value="#9333ea">Purple</option>
+      <option value="#0f766e">Teal</option>
+    </select>
+
+    <div id="cardPreview" class="card-design">
+      <h3 id="previewName">Your Name</h3>
+      <p id="previewEmail">yourname@gmail.com</p>
+    </div>
+
+    <button onclick="generateCard()">Generate QR</button>
+    <p id="cardMessage" class="message"></p>
+
+    <div id="qr"></div>
+
+    <h2>Saved Cards</h2>
+    <div id="savedCards"></div>
+  </section>
+</main>
+
+</body>
+</html>
