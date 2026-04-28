@@ -1,0 +1,97 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.auth-box,
+.dashboard-box {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+h2 {
+  margin-top: 18px;
+  margin-bottom: 12px;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  min-height: 42px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: #111827;
+  color: white;
+}
+
+.message {
+  min-height: 20px;
+  margin: 4px 0 14px;
+  font-size: 14px;
+  color: #b91c1c;
+}
+
+.success {
+  color: #047857;
+}
+
+.card-design {
+  width: 100%;
+  max-width: 360px;
+  min-height: 180px;
+  margin: 14px 0;
+  padding: 24px;
+  color: white;
+  background: #4f46e5;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-design h2,
+.card-design h3,
+.card-design p {
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+
+.saved-card {
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.saved-card .qr-box {
+  margin: 10px 0;
+}
+
+#qr {
+  margin: 12px 0;
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 16px;
+  }
+}
