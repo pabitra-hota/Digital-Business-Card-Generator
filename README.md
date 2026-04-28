@@ -7,6 +7,8 @@ This is a frontend-only static web app that works on GitHub Pages. It has login/
 ```text
 project-root
 ├── index.html
+├── login.html
+├── signup.html
 ├── dashboard.html
 ├── card.html
 ├── about.html
@@ -24,6 +26,7 @@ project-root
 
 ## Features
 
+- Login and signup are separate pages using the same CardForge theme.
 - Signup validates input only and does not save user data.
 - Login checks only predefined sample data from `js/sampleData.js`.
 - Current login session stores only the current user email in `localStorage`.
@@ -109,7 +112,7 @@ This lets the card open correctly on a phone after scanning the QR code.
 
 ## How To Use
 
-1. Open `index.html`.
+1. Open `index.html` or `login.html`.
 2. Login with:
    - Email: `test@gmail.com`
    - Password: `123456`
@@ -127,6 +130,8 @@ This lets the card open correctly on a phone after scanning the QR code.
 5. Click `Create repository`.
 6. Upload these project files and folders directly to the repository root:
    - `index.html`
+   - `login.html`
+   - `signup.html`
    - `dashboard.html`
    - `card.html`
    - `about.html`
