@@ -1,47 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Card Generator</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CardForge - Business Card Generator</title>
   <link rel="stylesheet" href="css/style.css">
-  <script defer src="js/storage.js"></script>
-  <script defer src="js/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/main.js"></script>
 </head>
-
 <body>
+  <nav>
+    <a href="dashboard.html" class="logo">CardForge</a>
+    <ul class="nav-links">
+      <li><a href="dashboard.html" class="active">Generator</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
 
-<main class="page">
-  <section class="dashboard-box">
-    <p><a href="about.html">About</a> | <a href="contact.html">Contact</a></p>
+  <div class="hero">
+    <h1>Business Card Generator</h1>
+    <p>Fill in your details, choose a color theme, then click Generate QR Code to create a scannable mobile card.</p>
+  </div>
 
-    <h2>Create Card</h2>
+  <div class="workspace">
+    <div class="form-panel">
+      <div class="form-section-label">Personal Info</div>
 
-    <input id="name" oninput="updatePreview()" placeholder="Name">
-    <input id="email" oninput="updatePreview()" placeholder="Email">
-    <select id="color" onchange="updatePreview()">
-      <option value="#4f46e5">Indigo</option>
-      <option value="#059669">Green</option>
-      <option value="#dc2626">Red</option>
-      <option value="#9333ea">Purple</option>
-      <option value="#0f766e">Teal</option>
-    </select>
+      <div class="field-group">
+        <label for="f-name">Full Name *</label>
+        <input type="text" id="f-name" placeholder="e.g. Pabitra Sharma" oninput="renderCard()">
+      </div>
 
-    <div id="cardPreview" class="card-design">
-      <h3 id="previewName">Your Name</h3>
-      <p id="previewEmail">yourname@gmail.com</p>
+      <div class="row-two">
+        <div class="field-group">
+          <label for="f-title">Job Title</label>
+          <input type="text" id="f-title" placeholder="e.g. Web Developer" oninput="renderCard()">
+        </div>
+        <div class="field-group">
+          <label for="f-company">Company</label>
+          <input type="text" id="f-company" placeholder="e.g. TechCorp" oninput="renderCard()">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="f-tagline">Short Bio / Tagline</label>
+        <textarea id="f-tagline" placeholder="e.g. Building the web, one pixel at a time." oninput="renderCard()"></textarea>
+      </div>
+
+      <div class="form-section-label">Contact Info</div>
+
+      <div class="field-group">
+        <label for="f-email">Gmail *</label>
+        <input type="email" id="f-email" placeholder="yourname@gmail.com" oninput="renderCard()">
+      </div>
+
+      <div class="row-two">
+        <div class="field-group">
+          <label for="f-phone">Phone</label>
+          <input type="tel" id="f-phone" placeholder="+91 98765 43210" oninput="renderCard()">
+        </div>
+        <div class="field-group">
+          <label for="f-website">Website</label>
+          <input type="text" id="f-website" placeholder="yoursite.com" oninput="renderCard()">
+        </div>
+      </div>
+
+      <div class="row-two">
+        <div class="field-group">
+          <label for="f-linkedin">LinkedIn</label>
+          <input type="text" id="f-linkedin" placeholder="linkedin.com/in/you" oninput="renderCard()">
+        </div>
+        <div class="field-group">
+          <label for="f-social">GitHub / Twitter</label>
+          <input type="text" id="f-social" placeholder="github.com/you" oninput="renderCard()">
+        </div>
+      </div>
+
+      <div class="form-section-label">Card Style</div>
+
+      <div class="theme-label">Choose Color Theme:</div>
+      <div class="theme-picker" id="themePicker"></div>
+
+      <div class="row-two">
+        <div class="field-group">
+          <label for="f-font">Font Style</label>
+          <select id="f-font" onchange="renderCard()">
+            <option value="serif">Elegant Serif</option>
+            <option value="sans-serif">Clean Sans</option>
+            <option value="monospace">Monospace</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="f-layout">Text Align</label>
+          <select id="f-layout" onchange="renderCard()">
+            <option value="left">Left</option>
+            <option value="center">Center</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-generate" onclick="generateCard()">Generate QR Code</button>
+        <button class="btn-reset" onclick="resetForm()">Reset</button>
+      </div>
     </div>
 
-    <button onclick="generateCard()">Generate QR</button>
-    <p id="cardMessage" class="message"></p>
+    <div class="preview-panel">
+      <div class="card-stage">
+        <div class="biz-card" id="bizCard">
+          <div>
+            <div class="card-name" id="c-name">Your Name</div>
+            <div class="card-job-title" id="c-title">Job Title</div>
+            <div class="card-company" id="c-company">Company</div>
+            <div class="card-tagline" id="c-tagline"></div>
+          </div>
+          <div class="card-contacts" id="c-contacts"></div>
+        </div>
+      </div>
 
-    <div id="qr"></div>
+      <div class="bottom-row">
+        <div class="qr-box">
+          <div class="box-title">QR Code</div>
+          <div id="qrcode"></div>
+          <p class="qr-hint" id="qr-hint">Fill the form and click<br><strong>Generate QR Code</strong></p>
+        </div>
 
-    <h2>Saved Cards</h2>
-    <div id="savedCards"></div>
-  </section>
-</main>
+        <div class="share-box">
+          <div class="box-title">Download</div>
+          <p style="font-size:13px; color:#666; margin-bottom:14px; line-height:1.6;">
+            Generate the QR first. You can download the QR image or download saved cards below.
+          </p>
+          <button class="share-btn" onclick="downloadQR()">Download QR Code</button>
+        </div>
+      </div>
 
+      <div class="saved-box">
+        <div class="box-title">Saved Cards</div>
+        <div id="savedCards"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 CardForge — INT219/INT222 Student Project
+  </footer>
+
+  <div class="notification" id="notification"></div>
 </body>
 </html>
