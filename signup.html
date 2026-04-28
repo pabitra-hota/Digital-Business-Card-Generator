@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - CardForge</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/auth.js"></script>
+</head>
+<body class="auth-body">
+  <div class="signup-box">
+    <h2>Create Account</h2>
+    <p class="sub-heading">Already have an account? <a href="login.html">Login here</a></p>
+
+    <div id="signupForm">
+      <div class="row-two">
+        <div class="field-group">
+          <label for="signupFirstName">First Name *</label>
+          <input type="text" id="signupFirstName" placeholder="First name">
+          <div class="hint" id="firstNameHint"></div>
+        </div>
+        <div class="field-group">
+          <label for="signupLastName">Last Name</label>
+          <input type="text" id="signupLastName" placeholder="Last name">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="signupEmail">Email Address *</label>
+        <input type="email" id="signupEmail" placeholder="yourname@gmail.com">
+        <div class="hint" id="signupEmailHint"></div>
+      </div>
+
+      <div class="field-group">
+        <label for="signupUsername">Username *</label>
+        <input type="text" id="signupUsername" placeholder="Choose a username">
+        <div class="hint" id="usernameHint"></div>
+      </div>
+
+      <div class="field-group">
+        <label for="signupPassword">Password *</label>
+        <div class="pw-wrapper">
+          <input type="password" id="signupPassword" placeholder="Create a password">
+          <button type="button" class="pw-toggle" onclick="togglePassword('signupPassword', this)">Show</button>
+        </div>
+        <div class="hint" id="signupPasswordHint"></div>
+      </div>
+
+      <div class="field-group">
+        <label for="confirmPassword">Confirm Password *</label>
+        <div class="pw-wrapper">
+          <input type="password" id="confirmPassword" placeholder="Repeat your password">
+          <button type="button" class="pw-toggle" onclick="togglePassword('confirmPassword', this)">Show</button>
+        </div>
+        <div class="hint" id="confirmPasswordHint"></div>
+      </div>
+
+      <div class="terms-row">
+        <input type="checkbox" id="terms">
+        <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+      </div>
+
+      <button class="btn-signup" onclick="signup()">Create Account</button>
+      <div class="message" id="signupMessage"></div>
+    </div>
+
+    <div class="success-box" id="successBox">
+      <div class="check-icon">✓</div>
+      <h3>Signup Validated!</h3>
+      <p>No account was stored. Use the sample login to continue.</p>
+      <div class="bottom-link"><a href="login.html">Go to Login</a></div>
+    </div>
+  </div>
+</body>
+</html>
