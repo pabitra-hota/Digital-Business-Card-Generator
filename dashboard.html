@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CardForge - Business Card Generator</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script defer src="js/storage.js"></script>
@@ -32,7 +36,7 @@
 
       <div class="field-group">
         <label for="f-name">Full Name *</label>
-        <input type="text" id="f-name" placeholder="e.g. Aryan Sharma" oninput="renderCard()">
+        <input type="text" id="f-name" placeholder="e.g. Pabitra Sharma" oninput="renderCard()">
       </div>
 
       <div class="row-two">
@@ -146,7 +150,7 @@
   </div>
 
   <footer>
-    &copy; 2026 CardForge — INT219/INT222 Student Team Project
+    &copy; 2026 CardForge — INT219/INT222 Student Project
   </footer>
 
   <div class="notification" id="notification"></div>
