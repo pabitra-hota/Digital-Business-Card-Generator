@@ -49,6 +49,15 @@ function togglePassword(inputId, button) {
   }
 }
 
+function getActionCodeSettings() {
+  var returnUrl = window.location.href.replace(/[^/]*$/, "login.html?verified=true");
+
+  return {
+    url: returnUrl,
+    handleCodeInApp: false
+  };
+}
+
 function signup() {
   const email = document.getElementById("signupEmail").value.trim();
   const password = document.getElementById("signupPassword").value;
@@ -56,11 +65,14 @@ function signup() {
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      const actionCodeSettings = getActionCodeSettings();
 
       // Send verification email
-      user.sendEmailVerification();
-
+      return user.sendEmailVerification(actionCodeSettings);
+    })
+    .then(() => {
       showMessage("signupMessage", "Verification email sent. Check inbox.", true);
+      auth.signOut();
     })
     .catch((error) => {
       showMessage("signupMessage", error.message, false);
@@ -87,3 +99,11 @@ function login() {
       showMessage("loginMessage", error.message, false);
     });
 }
+
+window.addEventListener("DOMContentLoaded", function () {
+  var params = new URLSearchParams(window.location.search);
+
+  if (params.get("verified") === "true") {
+    showMessage("loginMessage", "Email verified successfully. Please login.", true);
+  }
+});
