@@ -1,19 +1,23 @@
-function getCards() {
-  const savedCards = localStorage.getItem("cards");
-
-  if (!savedCards) {
-    return [];
-  }
-
-  return JSON.parse(savedCards);
-}
-
 function saveCard(card) {
-  const cards = getCards();
-  cards.push(card);
-  localStorage.setItem("cards", JSON.stringify(cards));
+  const user = auth.currentUser;
+  if (!user) return;
+
+  return db.collection("cards").add({
+    ...card,
+    userId: user.uid
+  });
 }
 
-function getUserCards(email) {
-  return getCards().filter(card => card.userEmail === email);
+function getUserCards(callback) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  db.collection("cards")
+    .where("userId", "==", user.uid)
+    .get()
+    .then((snapshot) => {
+      const cards = [];
+      snapshot.forEach(doc => cards.push(doc.data()));
+      callback(cards);
+    });
 }
