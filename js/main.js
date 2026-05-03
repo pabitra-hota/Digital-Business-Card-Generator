@@ -15,14 +15,22 @@ var selectedTheme = themes[0];
 var lastGeneratedCard = null;
 
 function checkSession() {
-  if (!localStorage.getItem("currentUser")) {
-    window.location.href = "login.html";
-  }
+  auth.onAuthStateChanged((user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    buildThemePicker();
+    renderCard();
+    renderCards();
+  });
 }
 
 function logout() {
-  localStorage.removeItem("currentUser");
-  window.location.href = "login.html";
+  auth.signOut().then(() => {
+    window.location.href = "login.html";
+  });
 }
 
 function showNotification(message) {
@@ -76,7 +84,7 @@ function buildThemePicker() {
 function getFormCardData() {
   return {
     id: Date.now(),
-    userEmail: localStorage.getItem("currentUser"),
+    userEmail: auth.currentUser ? auth.currentUser.email : "",
     name: document.getElementById("f-name").value.trim(),
     title: document.getElementById("f-title").value.trim(),
     company: document.getElementById("f-company").value.trim(),
@@ -198,8 +206,10 @@ function generateCard() {
   }
 
   lastGeneratedCard = card;
-  saveCard(card);
-  renderCards();
+  const saveResult = saveCard(card);
+  if (saveResult && saveResult.then) {
+    saveResult.then(() => renderCards());
+  }
   generateQR(card, "qrcode");
 
   document.getElementById("qr-hint").style.display = "none";
@@ -221,33 +231,33 @@ function generateQR(card, elementId) {
 }
 
 function renderCards() {
-  var userEmail = localStorage.getItem("currentUser");
-  var cards = getUserCards(userEmail);
   var container = document.getElementById("savedCards");
 
   container.innerHTML = "";
 
-  if (cards.length === 0) {
-    container.innerHTML = '<p style="font-size:13px; color:#666;">No saved cards yet.</p>';
-    return;
-  }
+  getUserCards(function (cards) {
+    if (cards.length === 0) {
+      container.innerHTML = '<p style="font-size:13px; color:#666;">No saved cards yet.</p>';
+      return;
+    }
 
-  cards.slice().reverse().forEach(function (card) {
-    var wrapper = document.createElement("div");
-    wrapper.className = "saved-card";
-    wrapper.innerHTML =
-      '<div class="saved-card-layout">' +
-        '<div id="saved-card-' + card.id + '">' + buildCardHtml(card, false) + '</div>' +
-        '<div>' +
-          '<div class="saved-qr" id="saved-qr-' + card.id + '"></div>' +
-          '<div class="saved-actions">' +
-            '<button class="download-btn" onclick="downloadSavedCard(' + card.id + ')">Download Card PNG</button>' +
+    cards.slice().reverse().forEach(function (card) {
+      var wrapper = document.createElement("div");
+      wrapper.className = "saved-card";
+      wrapper.innerHTML =
+        '<div class="saved-card-layout">' +
+          '<div id="saved-card-' + card.id + '">' + buildCardHtml(card, false) + '</div>' +
+          '<div>' +
+            '<div class="saved-qr" id="saved-qr-' + card.id + '"></div>' +
+            '<div class="saved-actions">' +
+              '<button class="download-btn" onclick="downloadSavedCard(' + card.id + ')">Download Card PNG</button>' +
+            '</div>' +
           '</div>' +
-        '</div>' +
-      '</div>';
+        '</div>';
 
-    container.appendChild(wrapper);
-    generateQR(card, "saved-qr-" + card.id);
+      container.appendChild(wrapper);
+      generateQR(card, "saved-qr-" + card.id);
+    });
   });
 }
 
@@ -292,7 +302,4 @@ function resetForm() {
 
 window.onload = function () {
   checkSession();
-  buildThemePicker();
-  renderCard();
-  renderCards();
 };
