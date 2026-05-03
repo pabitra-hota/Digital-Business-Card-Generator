@@ -50,11 +50,11 @@ function togglePassword(inputId, button) {
 }
 
 function getActionCodeSettings() {
-  var returnUrl = window.location.href.replace(/[^/]*$/, "login.html?verified=true");
+  var returnUrl = window.location.href.replace(/[^/]*$/, "login.html");
 
   return {
     url: returnUrl,
-    handleCodeInApp: false
+    handleCodeInApp: true
   };
 }
 
@@ -100,10 +100,21 @@ function login() {
     });
 }
 
+// Handle email verification from link
 window.addEventListener("DOMContentLoaded", function () {
   var params = new URLSearchParams(window.location.search);
+  var oobCode = params.get("oobCode");
+  var mode = params.get("mode");
 
-  if (params.get("verified") === "true") {
-    showMessage("loginMessage", "Email verified successfully. Please login.", true);
+  // If this is a verification link
+  if (mode === "verifyEmail" && oobCode) {
+    // Apply the verification code
+    auth.applyActionCode(oobCode)
+      .then(() => {
+        showMessage("loginMessage", "Email verified successfully! Please login.", true);
+      })
+      .catch((error) => {
+        showMessage("loginMessage", "Verification failed: " + error.message, false);
+      });
   }
 });
