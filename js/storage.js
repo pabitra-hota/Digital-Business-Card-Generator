@@ -1,6 +1,10 @@
 function saveCard(card) {
   const user = auth.currentUser;
-  if (!user) return;
+
+  if (!user || !user.emailVerified) {
+    alert("Email not verified. Cannot save data.");
+    return;
+  }
 
   return db.collection("cards").add({
     ...card,
