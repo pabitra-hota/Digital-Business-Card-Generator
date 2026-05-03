@@ -54,8 +54,13 @@ function signup() {
   const password = document.getElementById("signupPassword").value;
 
   auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      showMessage("signupMessage", "Account created successfully!", true);
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      // Send verification email
+      user.sendEmailVerification();
+
+      showMessage("signupMessage", "Verification email sent. Check inbox.", true);
     })
     .catch((error) => {
       showMessage("signupMessage", error.message, false);
@@ -67,7 +72,15 @@ function login() {
   const password = document.getElementById("loginPassword").value;
 
   auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        showMessage("loginMessage", "Please verify your email first.", false);
+        auth.signOut();
+        return;
+      }
+
       window.location.href = "dashboard.html";
     })
     .catch((error) => {
