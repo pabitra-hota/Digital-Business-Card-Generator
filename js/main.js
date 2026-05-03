@@ -21,6 +21,13 @@ function checkSession() {
       return;
     }
 
+    if (!user.emailVerified) {
+      alert("Verify your email before accessing dashboard.");
+      auth.signOut();
+      window.location.href = "login.html";
+      return;
+    }
+
     buildThemePicker();
     renderCard();
     renderCards();
