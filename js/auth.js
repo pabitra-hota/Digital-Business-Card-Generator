@@ -7,6 +7,18 @@ function showMessage(elementId, text, isSuccess) {
   message.className = isSuccess ? "message success" : "message error";
 }
 
+// Extract clean error message without "Firebase: " prefix
+function getCleanErrorMessage(error) {
+  var message = error.message || error.code || "An error occurred";
+  
+  // Remove "Firebase: " prefix if present
+  if (message.startsWith("Firebase: ")) {
+    message = message.substring(9); // Remove "Firebase: "
+  }
+  
+  return message;
+}
+
 // Strict Gmail validation used by login and signup.
 function validateGmail(email) {
   var regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
@@ -75,7 +87,7 @@ function signup() {
       auth.signOut();
     })
     .catch((error) => {
-      showMessage("signupMessage", error.message, false);
+      showMessage("signupMessage", getCleanErrorMessage(error), false);
     });
 }
 
@@ -96,7 +108,7 @@ function login() {
       window.location.href = "dashboard.html";
     })
     .catch((error) => {
-      showMessage("loginMessage", error.message, false);
+      showMessage("loginMessage", getCleanErrorMessage(error), false);
     });
 }
 
@@ -114,7 +126,7 @@ window.addEventListener("DOMContentLoaded", function () {
         showMessage("loginMessage", "Email verified successfully! Please login.", true);
       })
       .catch((error) => {
-        showMessage("loginMessage", "Verification failed: " + error.message, false);
+        showMessage("loginMessage", "Verification failed: " + getCleanErrorMessage(error), false);
       });
   }
 });
